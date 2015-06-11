@@ -3,8 +3,81 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
+    <style>
+        .panel .alert{
+            display: none;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="panel panel-info" id="panel1">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        测试
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="realname">姓名</label>
+                            <input type="text" class="form-control" id="realname" placeholder="请输入您的真实姓名">
+                            <p class="alert alert-danger"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="minLength">字符</label>
+                            <input type="text" class="form-control" id="minLength" placeholder="最小长度为6">
+                            <p class="alert alert-danger"></p>
+                        </div>
+                        <div class="form-group">
+                            <label>多个验证</label>
+                            <input type="text" class="form-control" id="multi" placeholder="实名，最小为4位"/>
+                            <p class="alert alert-danger"></p>
+                        </div>
 
+                        <a class="validate btn btn-success" class="btn btn-default">验证</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="../src/jquery.validation.js"></script>
+<script>
+    $(function(){
+        $('#panel1 input')
+
+                .on('before.validation',function(){
+                    $(this).next().hide().text('');
+                })
+                .on('failed.validation', function (e,res) {
+                    var errorTip = $(this).next()
+                    errorTip.show().text(errorTip.text()+','+res.message);
+                })
+        $('#realname').validation('realName');
+        $('#minLength').validation('minLength:6');
+        var multiValidation = $('#multi').validation('realName').data('validation');
+        multiValidation.add('minLength:4');
+        $('#panel1 .validate').click(function(){
+            $('#panel1 input').each(function(){
+                var validation = $(this).data('validation');
+                console.log(validation.validate());
+
+            });
+            return false;
+        })
+
+
+
+    });
+</script>
 </body>
 </html>
