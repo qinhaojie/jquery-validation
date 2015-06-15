@@ -10,7 +10,7 @@
             var state = /^[\u4e00-\u9fa5]+$/.test(value);
             return {
             state:state,
-            message:state?'验证成功':'请输入您的真实姓名'
+            message:state?'验证成功':'只能输入正确的中文'
             };
         },
         //中国手机号码
@@ -81,11 +81,27 @@
 
     };
     /**
+     * 批量添加验证规则，多条规则之间以分号;隔开
+     * @param strategy e.g. 'chinese;minLength:2;maxLength:10'
+     * @returns {Validation}
+     */
+    Validation.prototype.add = function(strategy){
+        if(isFunction(strategy)){
+            return this.addOne(strategy);
+        }
+        var strategies = strategy.split(';');
+        var len  = strategies.length;
+        while(len--)
+            this.addOne(strategies[len]);
+        return this;
+
+    }
+    /**
      * 添加验证规则，如果是字符串则通过verifyStrategies中对应方法添加
      * @param strategy [string|function]
      * @returns {Validation}
      */
-    Validation.prototype.add = function (strategy) {
+    Validation.prototype.addOne = function (strategy) {
         if(isString(strategy)){
             var arg = strategy.split(':');
             strategy = arg.shift();
@@ -141,11 +157,19 @@
 
 
     $.fn.validation = function(strategy){
-        var $this = $(this);
-        var validation = $this.data('validation');
+
+
+        var validation = this.data('validation');
+        var args,ret;
         if(!validation){
-            $this.data('validation',new Validation(this,strategy));
+            //如果实例不存在则是初始化
+            this.data('validation',new Validation(this,strategy));
+        }else{
+            //如果存在则是调用方法
+             args = Array.prototype.slice.call(arguments,1);
+             ret = validation[strategy].apply(validation,args);
         }
-        return this;
+        //如果调用方法的返回值不是实例，则返回ret否则返回this以便链式调用
+        return (ret && ret !== validation) ? ret : this;
     }
 })(jQuery)

@@ -25,7 +25,7 @@
                     <form>
                         <div class="form-group">
                             <label for="chinese">汉字</label>
-                            <input type="text" class="form-control" id="chinese" placeholder="请输入您的真实姓名">
+                            <input type="text" class="form-control" id="chinese" placeholder="汉字">
                             <p class="alert alert-danger"></p>
                         </div>
                         <div class="form-group">
@@ -55,7 +55,7 @@
                         </div>
                         <div class="form-group">
                             <label>多个验证</label>
-                            <input type="text" class="form-control" id="multi" placeholder="实名，最小为4位"/>
+                            <input type="text" class="form-control" id="multi" placeholder="汉字，最小为2位，最大10位"/>
                             <p class="alert alert-danger"></p>
                         </div>
 
@@ -85,20 +85,23 @@
                 .on('success.validation',function(){
                     var errorTip = $(this).next()
                     errorTip.hide();
-                    console.log(arguments)
+
                 });
         $('#chinese').validation('chinese');
         $('#minLength').validation('minLength:6');
         $('#sameAs').validation('sameAs:#minLength');
         $('#maxLength').validation('maxLength:10');
         $('#letter').validation('letter');
-        $('#email').validation('email');
-        var multiValidation = $('#multi').validation('chinese').data('validation');
-        multiValidation.add('minLength:4');
+        $('#email').validation('email').validation('add','maxLength:10');
+        var multiValidation = $('#multi').validation('chinese;minLength:2;maxLength:10')
+               /* .data('validation');
+        multiValidation.add('minLength:4');*/
         $('#panel1 .validate').click(function(){
             $('#panel1 input').each(function(){
-                var validation = $(this).data('validation');
-                validation.validate()
+               /* var validation = $(this).data('validation');
+                validation.validate()*/
+               var ret = $(this).validation('validate');
+               // console.log(ret);
 
             });
             return false;
