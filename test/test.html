@@ -58,7 +58,11 @@
                             <input type="text" class="form-control" id="multi" placeholder="汉字，最小为2位，最大10位"/>
                             <p class="alert alert-danger"></p>
                         </div>
-
+                        <div class="form-group">
+                            <label>data api</label>
+                            <input type="text" class="form-control" data-validate="chinese;minLength:2;maxLength:10" placeholder="汉字，最小为2位，最大10位"/>
+                            <p class="alert alert-danger"></p>
+                        </div>
                         <a class="validate btn btn-success" class="btn btn-default">验证</a>
                     </form>
                 </div>
@@ -93,9 +97,8 @@
         $('#maxLength').validation('maxLength:10');
         $('#letter').validation('letter');
         $('#email').validation('email').validation('add','maxLength:10');
-        var multiValidation = $('#multi').validation('chinese;minLength:2;maxLength:10')
-               /* .data('validation');
-        multiValidation.add('minLength:4');*/
+        $('#multi').validation('chinese;minLength:2;maxLength:10')
+
         $('#panel1 .validate').click(function(){
             $('#panel1 input').each(function(){
                /* var validation = $(this).data('validation');

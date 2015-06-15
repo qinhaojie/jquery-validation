@@ -1,16 +1,21 @@
 /**
  * jquery.validation
- *
+ * author : qinhaojie
+ * email : qinhaojie1992@163.com
+ * https://github.com/qinhaojie/jquery-validation
  */
 
 (function($){
+
+    "use strict";
+
     var verifyStrategies = {
         //汉字
         chinese: function(value){
             var state = /^[\u4e00-\u9fa5]+$/.test(value);
             return {
             state:state,
-            message:state?'验证成功':'只能输入正确的中文'
+            message:state?'验证成功':'只能输入中文'
             };
         },
         //中国手机号码
@@ -95,7 +100,7 @@
             this.addOne(strategies[len]);
         return this;
 
-    }
+    };
     /**
      * 添加验证规则，如果是字符串则通过verifyStrategies中对应方法添加
      * @param strategy [string|function]
@@ -124,7 +129,6 @@
      */
     Validation.prototype.validate = function () {
         var len = this.validations.length;
-        var i = 0;
         var isSuccess = true;
         var value = $.trim(this.el.val());
         var result = [];
@@ -171,5 +175,15 @@
         }
         //如果调用方法的返回值不是实例，则返回ret否则返回this以便链式调用
         return (ret && ret !== validation) ? ret : this;
-    }
-})(jQuery)
+    };
+
+
+    //data api 进行初始化
+    $(function(){
+        $('[data-validate]').each(function(){
+            var strategy = $(this).data('validate');
+            $(this).validation(strategy);
+        })
+    });
+
+})(jQuery);
