@@ -30,6 +30,18 @@
                     message:state?'验证成功':'长度不能小于'+lenth
                 }
             }
+        },
+        //与前一次输入相同
+        sameAs:function(target){
+            target = $(target);
+            return function(value){
+                var prevVlaue = $.trim(target.val());
+                var state = value === prevVlaue;
+                return {
+                    state:state,
+                    message:state?'验证成功':'两次输入不一致'
+                }
+            }
         }
 
 

@@ -34,6 +34,11 @@
                             <p class="alert alert-danger"></p>
                         </div>
                         <div class="form-group">
+                            <label for="minLength">与某个输入一致</label>
+                            <input type="text" class="form-control" id="sameAs" placeholder="与上一输入一致">
+                            <p class="alert alert-danger"></p>
+                        </div>
+                        <div class="form-group">
                             <label>多个验证</label>
                             <input type="text" class="form-control" id="multi" placeholder="实名，最小为4位"/>
                             <p class="alert alert-danger"></p>
@@ -62,14 +67,20 @@
                     var errorTip = $(this).next()
                     errorTip.show().text(errorTip.text()+','+res.message);
                 })
+                .on('success.validation',function(){
+                    var errorTip = $(this).next()
+                    errorTip.hide();
+                    console.log(arguments)
+                });
         $('#realname').validation('realName');
         $('#minLength').validation('minLength:6');
+        $('#sameAs').validation('sameAs:#minLength');
         var multiValidation = $('#multi').validation('realName').data('validation');
         multiValidation.add('minLength:4');
         $('#panel1 .validate').click(function(){
             $('#panel1 input').each(function(){
                 var validation = $(this).data('validation');
-                console.log(validation.validate());
+                validation.validate()
 
             });
             return false;
