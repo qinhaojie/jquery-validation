@@ -5,9 +5,9 @@
 
 (function($){
     var verifyStrategies = {
-        //中文实名验证策略
-        realName: function(value){
-            var state = /^[\u4e00-\u9fa5]{2,10}$/.test(value);
+        //汉字
+        chinese: function(value){
+            var state = /^[\u4e00-\u9fa5]+$/.test(value);
             return {
             state:state,
             message:state?'验证成功':'请输入您的真实姓名'
@@ -24,14 +24,24 @@
         //最小长度
         minLength:function(lenth){
             return function(value){
-                var state = lenth < value.length;
+                var state = lenth <= value.length;
                 return {
                     state:state,
                     message:state?'验证成功':'长度不能小于'+lenth
                 }
             }
         },
-        //与前一次输入相同
+        //最大长度
+        maxLength:function(lenth){
+            return function(value){
+                var state = lenth >= value.length;
+                return {
+                    state:state,
+                    message:state?'验证成功':'长度不能大于'+lenth
+                }
+            }
+        },
+        //与某一文本框输入相同
         sameAs:function(target){
             target = $(target);
             return function(value){
@@ -41,6 +51,22 @@
                     state:state,
                     message:state?'验证成功':'两次输入不一致'
                 }
+            }
+        },
+        //字母数字下划线
+        letter:function(value){
+            var state = /^\w+$/.test(value);
+            return {
+                state:state,
+                message:state?'验证成功':'只能包含字符，数字，下划线组成'
+            }
+        },
+        //邮箱
+        email:function(value){
+            var state = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(value);
+            return {
+                state:state,
+                message:state?'验证成功':'请输入正确的邮箱地址'
             }
         }
 
