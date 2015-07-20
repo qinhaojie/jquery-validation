@@ -73,6 +73,33 @@
                 state:state,
                 message:state?'验证成功':'请输入正确的邮箱地址'
             }
+        },
+        //普通字符与汉字
+        title:function(value) {
+            var state = /^[\w\u4e00-\u9fa5]*$/.test(value);
+            return {
+                state: state,
+                message: state ? '验证成功' : '不能包含符号'
+            }
+        },
+        //数字
+        number:function(value) {
+            var state = /^\d*$/.test(value);
+            return {
+                state: state,
+                message: state ? '验证成功' : '只能包含数字'
+            };
+        },
+        //自定义正则
+        reg:function(reg) {
+            var regexp = new RegExp(reg);
+            return function(value) {
+                var state = regexp.test(value);
+                return {
+                    state: state,
+                    message: state ? '验证成功' : '失败'
+                };
+            };
         }
 
 
